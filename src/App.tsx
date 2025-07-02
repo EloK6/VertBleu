@@ -54,7 +54,7 @@ function App() {
             transition={{ duration: 0.4, ease: 'easeInOut' }}
           >
             <ResultsBlock split={split} showResults={showResults} onRestart={handleRestart} />
-            <ShareBlock split={split} exportRef={exportRef} />
+            <ShareBlock />
           </motion.div>
         )}
       </AnimatePresence>
