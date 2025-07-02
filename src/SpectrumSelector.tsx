@@ -31,11 +31,11 @@ const SpectrumSelector: React.FC<SpectrumSelectorProps> = ({ split, setSplit, on
   };
 
   // Drag logic for the color bubble
-  const handleBubbleMouseDown = (e: React.MouseEvent) => {
+  const handleBubbleMouseDown = () => {
     setIsDragging(true);
     document.body.style.userSelect = 'none';
   };
-  const handleBubbleTouchStart = (e: React.TouchEvent) => {
+  const handleBubbleTouchStart = () => {
     setIsDragging(true);
     document.body.style.userSelect = 'none';
   };
