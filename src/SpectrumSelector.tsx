@@ -16,9 +16,6 @@ const SpectrumSelector: React.FC<SpectrumSelectorProps> = ({ split, setSplit, on
   const [isDragging, setIsDragging] = useState(false);
   // Position du curseur sur le gradient (0% à 100%)
   const sliderValue = ((split - MIN_HUE) / (MAX_HUE - MIN_HUE)) * 100;
-  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSplit(Number(e.target.value));
-  };
 
   const handleSubmit = async () => {
     const { error } = await supabase.from('votes').insert([{ split_hue: split }]);

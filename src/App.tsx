@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion';
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import IntroductionBlock from "./IntroductionBlock";
 import SpectrumSelector from "./SpectrumSelector";
