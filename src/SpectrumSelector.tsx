@@ -8,7 +8,7 @@ type SpectrumSelectorProps = {
   split: number;
   setSplit: (value: number) => void;
   onShowResults: () => void;
-  exportRef?: React.RefObject<HTMLDivElement>;
+  exportRef?: React.RefObject<HTMLDivElement | null>;
 };
 
 const SpectrumSelector: React.FC<SpectrumSelectorProps> = ({ split, setSplit, onShowResults, exportRef }) => {
