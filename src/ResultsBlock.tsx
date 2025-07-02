@@ -5,12 +5,13 @@ import * as d3 from "d3";
 type ResultsBlockProps = {
   split: number;
   showResults: boolean;
+  onRestart?: () => void;
 };
 
 const MIN_HUE = 120;
 const MAX_HUE = 240;
 
-const ResultsBlock: React.FC<ResultsBlockProps> = ({ split, showResults }) => {
+const ResultsBlock: React.FC<ResultsBlockProps> = ({ split, showResults, onRestart }) => {
   const [votes, setVotes] = useState<number[]>([]);
   const [similarity, setSimilarity] = useState<number>(0);
   const [containerWidth, setContainerWidth] = useState(600);
@@ -83,6 +84,13 @@ const ResultsBlock: React.FC<ResultsBlockProps> = ({ split, showResults }) => {
         </ul>
         <p className="mt-2">Donc même si <span className="font-mono text-cyan-700 dark:text-cyan-300">Hue 180°</span> est techniquement la coupure, le point de bascule perçu peut se situer entre <span className="font-mono text-cyan-700 dark:text-cyan-300">Hue 160° à 200°</span> selon les individus.</p>
       </div>
+      {onRestart && (
+        <div className="flex justify-center mt-8 pb-8" style={{paddingBottom: 30}}>
+          <button onClick={onRestart} className="px-6 py-2 bg-black text-white rounded shadow hover:bg-gray-800 transition">
+            Recommencer
+          </button>
+        </div>
+      )}
     </div>
   );
 };

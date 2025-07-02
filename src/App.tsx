@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { AnimatePresence, motion } from 'framer-motion';
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -26,12 +27,42 @@ function App() {
     }
   }, []);
 
+  // Fonction pour recommencer
+  const handleRestart = () => {
+    setShowResults(false);
+    setSplit(MIN_HUE);
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white flex flex-col items-center px-2">
       <IntroductionBlock />
-      <SpectrumSelector split={split} setSplit={setSplit} onShowResults={() => setShowResults(true)} exportRef={exportRef} />
-      <ResultsBlock split={split} showResults={showResults} />
-      <ShareBlock split={split} exportRef={exportRef} />
+      <AnimatePresence mode="wait">
+        {!showResults ? (
+          <motion.div
+            key="selector"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ duration: 0.4, ease: 'easeInOut' }}
+          >
+            <SpectrumSelector split={split} setSplit={setSplit} onShowResults={() => setShowResults(true)} exportRef={exportRef} />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="results"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ duration: 0.4, ease: 'easeInOut' }}
+          >
+            <ResultsBlock split={split} showResults={showResults} onRestart={handleRestart} />
+            <ShareBlock split={split} exportRef={exportRef} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <footer className="fixed bottom-0 left-0 w-screen bg-black text-white text-center py-4 text-sm z-50" style={{marginBottom:0}}>
+        Vert ou bleu est un projet d'exploration proposé par <a href="https://dataviz-centric.com/" target="_blank" rel="noopener noreferrer" className="text-white underline hover:underline">Dataviz Centric</a>
+      </footer>
     </div>
   )
 }

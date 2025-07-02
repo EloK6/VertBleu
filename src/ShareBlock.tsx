@@ -29,14 +29,7 @@ const ShareBlock: React.FC<ShareBlockProps> = ({ split, exportRef }) => {
     setExporting(false);
   };
 
-  return (
-    <div className="my-8 flex flex-col items-center">
-      <button className="px-6 py-2 bg-green-600 text-white rounded shadow hover:bg-green-700 transition mb-4" onClick={handleCopy}>
-        {copied ? "Lien copié !" : "Partager votre perception"}
-      </button>
-      <div className="mb-2 text-gray-700 dark:text-gray-200 break-all">Lien&nbsp;: <span className="font-mono">{shareUrl}</span></div>
-    </div>
-  );
+  return null;
 };
 
 export default ShareBlock; 

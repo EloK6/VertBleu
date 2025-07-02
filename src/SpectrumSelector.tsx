@@ -74,11 +74,55 @@ const SpectrumSelector: React.FC<SpectrumSelectorProps> = ({ split, setSplit, on
     };
   }, [isDragging]);
 
+  // Ajout : drag sur toute la barre
+  const handleBarMouseDown = (e: React.MouseEvent | React.TouchEvent) => {
+    setIsDragging(true);
+    document.body.style.userSelect = 'none';
+    handleBarMove(e);
+  };
+  const handleBarMove = (e: MouseEvent | TouchEvent | React.MouseEvent | React.TouchEvent) => {
+    if (!gradientRef.current) return;
+    let clientX = 0;
+    if ('touches' in e && e.touches.length > 0) {
+      clientX = e.touches[0].clientX;
+    } else if ('clientX' in e) {
+      clientX = e.clientX;
+    }
+    const rect = gradientRef.current.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const percent = Math.max(0, Math.min(x / rect.width, 1));
+    const newSplit = Math.round(MIN_HUE + percent * (MAX_HUE - MIN_HUE));
+    setSplit(newSplit);
+  };
+  React.useEffect(() => {
+    const move = (e: MouseEvent | TouchEvent) => {
+      if (isDragging) handleBarMove(e);
+    };
+    const up = () => handleMouseUp();
+    if (isDragging) {
+      window.addEventListener('mousemove', move);
+      window.addEventListener('mouseup', up);
+      window.addEventListener('touchmove', move);
+      window.addEventListener('touchend', up);
+    }
+    return () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+      window.removeEventListener('touchmove', move);
+      window.removeEventListener('touchend', up);
+    };
+  }, [isDragging]);
+
   return (
     <div className="my-8 flex flex-col items-center" style={{ width: '80vw' }}>
       <div className="w-full max-w-2xl flex flex-col items-center" ref={exportRef}>
         {/* Dégradé vert → turquoise → bleu */}
-        <div className="w-full h-[130px] rounded mb-4 relative" ref={gradientRef}>
+        <div
+          className="w-full h-[130px] rounded mb-4 relative cursor-pointer"
+          ref={gradientRef}
+          onMouseDown={handleBarMouseDown}
+          onTouchStart={handleBarMouseDown}
+        >
           <div
             style={{
               background:
@@ -102,14 +146,6 @@ const SpectrumSelector: React.FC<SpectrumSelectorProps> = ({ split, setSplit, on
             onTouchStart={handleBubbleTouchStart}
           />
         </div>
-        <input
-          type="range"
-          min={MIN_HUE}
-          max={MAX_HUE}
-          value={split}
-          onChange={handleSliderChange}
-          className="w-full max-w-2xl mb-2"
-        />
         <div className="flex justify-between w-full max-w-xl text-sm text-gray-600 dark:text-gray-300">
           <span>Vert</span>
           <span>Bleu</span>
@@ -118,8 +154,8 @@ const SpectrumSelector: React.FC<SpectrumSelectorProps> = ({ split, setSplit, on
           <span className="text-sm text-gray-700 dark:text-gray-200">Point de bascule&nbsp;:</span>
           <span className="font-mono text-base">{Math.round(split)}°</span>
         </div>
-        <button className="mt-6 px-6 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition" onClick={handleSubmit}>
-          Voir mes résultats
+        <button className="mt-6 px-6 py-2 bg-black text-white rounded shadow hover:bg-gray-800 transition" onClick={handleSubmit}>
+          Voir les résultats
         </button>
       </div>
     </div>
